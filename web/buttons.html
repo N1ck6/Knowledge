@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Поиск</title>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" type="text/css" href="main.css" />
+		<script type="text/javascript" src="/eel.js"></script>
+		<link rel="icon" type="image/png" href="favicon.svg" />
+	</head>
+	<body onload="SearchAuthors()">
+		<button id="close" onclick="window.history.go(-1)">⤺</button>
+		<div id="search">
+			<input id="bar" type="text" placeholder="Поиск" autocomplete="off" />
+		</div>
+		<div id="content"></div>
+		<script>
+			async function SearchAuthors() {
+				let content = document.getElementById('content')
+				while (content.firstChild) {
+					content.removeChild(content.firstChild)
+				}
+				let data = await eel.SearchAuthors(
+					document.getElementById('bar').value
+				)()
+				if (data != []) {
+					for (var i = 0; i < data.length; i++) {
+						var button = document.createElement('button')
+						button.id = 'item'
+						button.onclick = function () {
+							open_txt(this)
+						}
+						content.appendChild(button)
+						for (var j = 0; j < data[i].length; j++) {
+							var div = document.createElement('div')
+							div.classList.add('text' + (j + 1))
+							div.innerHTML = data[i][j]
+							button.appendChild(div)
+						}
+					}
+				}
+			}
+
+			async function open_txt(elem) {
+				var text = elem.children[1].innerHTML
+				if (text != 'Author not found') {
+					location.href = '/choice.html?name=' + text
+				}
+			}
+			document.getElementById('bar').addEventListener('keyup', function () {
+				SearchAuthors()
+			})
+		</script>
+	</body>
+</html>

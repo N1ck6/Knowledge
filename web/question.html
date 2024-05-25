@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Тест</title>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" type="text/css" href="main.css" />
+		<script type="text/javascript" src="/eel.js"></script>
+		<link rel="icon" type="image/png" href="favicon.svg" />
+		<script type="text/javascript">
+			async function GetReady() {
+				const params = new URLSearchParams(window.location.search)
+				const question = params.get('name')
+				const ans = document.getElementById('answer')
+				const val = document.getElementById('val')
+				var value = await eel.CheckRandom(question)()
+				if (val.className != '') {
+					val.classList.remove(val.className)
+				}
+				val.classList.add(value[1].replace(' ', '_'))
+				document.startViewTransition(() => {
+					val.value = value[0]
+					ans.disabled = false
+					ans.value = ''
+				})
+				document.getElementById('check').innerHTML = 'Проверить'
+			}
+		</script>
+	</head>
+	<body onload="GetReady()">
+		<button id="close" onclick="window.history.go(-1)">⤺</button>
+		<div id="name1">
+			<button id="check" onclick="moveButton()">Проверить</button>
+		</div>
+		<div id="q-content">
+			<input id="answer" autocomplete="off" />
+			<input id="val" disabled="true" />
+		</div>
+
+		<img
+			id="status"
+			src="https://cdn.icon-icons.com/icons2/1508/PNG/256/anydo_104098.png"
+		/>
+		<script>
+			function moveButton() {
+				if (document.getElementById('check').innerHTML == 'Проверить') {
+					document.getElementById('check').innerHTML = 'Сравнение...'
+					const ans = document.getElementById('answer')
+					const val = document.getElementById('val')
+					ans.disabled = true
+					document.startViewTransition(() => {
+						val.value = val.className
+							.replace(' moveCenter', '')
+							.replace('_', ' ')
+						ans.value = capitalizeWords(ans.value)
+					})
+					ans.classList.add('moveCenter')
+					val.classList.add('moveCenter')
+					setTimeout(() => {
+						checkAnswer()
+					}, 3000)
+				}
+			}
+			async function checkAnswer() {
+				var val = document.getElementById('val').value.toLowerCase().trim()
+				var ans = document.getElementById('answer').value.toLowerCase().trim()
+				document.startViewTransition(() => {
+					if (ans === val || ans === val.split(' ').pop()) {
+						showImage('v')
+						document.getElementById('check').innerHTML = 'Верно!'
+					} else {
+						showImage('x')
+						document.getElementById('check').innerHTML = 'Неверно!'
+					}
+				})
+				setTimeout(() => {
+					document.getElementById('answer').classList.remove('moveCenter')
+					document.getElementById('val').classList.remove('moveCenter')
+				}, 1000)
+				setTimeout(() => {
+					GetReady()
+				}, 3000)
+			}
+			function showImage(ans) {
+				var image = document.getElementById('status')
+				if (ans == 'x') {
+					image.src = 'data/failure.png'
+				} else {
+					image.src = 'data/success.png'
+				}
+				setTimeout(() => {
+					image.style.opacity = '100%'
+					image.classList.toggle('show')
+					setTimeout(function () {
+						image.classList.remove('show')
+					}, 700)
+					image.classList.toggle('transparent')
+					setTimeout(function () {
+						image.style.opacity = '0'
+					}, 250)
+				}, 300)
+			}
+			var an = document.getElementById('answer')
+			an.addEventListener('keydown', function (e) {
+				if (e.key === 'Enter') {
+					moveButton()
+				}
+			})
+			const capitalizeWords = str => {
+				return str
+					.toLowerCase()
+					.replace(/(^|\s)\S/g, match => match.toUpperCase())
+			}
+		</script>
+	</body>
+</html>

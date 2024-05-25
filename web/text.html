@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title> </title>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" type="text/css" href="main.css" />
+		<script type="text/javascript" src="/eel.js"></script>
+		<link rel="icon" type="image/png" href="favicon.svg" />
+		<link
+			rel="stylesheet"
+			href="https://cdn.jsdelivr.net/npm/locomotive-scroll@3.5.4/dist/locomotive-scroll.css"
+		/>
+		<script src="https://cdn.jsdelivr.net/npm/locomotive-scroll@3.5.4/dist/locomotive-scroll.min.js"></script>
+		<script>
+			async function getContent() {
+				const params = new URLSearchParams(window.location.search)
+				const val = params.get('name').split('?')[0]
+				document.title = val.slice(0, -1)
+				document.getElementById('main_text').innerHTML = await eel.getText(
+					val
+				)()
+				if (
+					params.get('name').slice(-1) === '1' &&
+					document.getElementById('holder').offsetHeight > 600
+				) {
+					var el = document.getElementById('holder')
+					var height = el.offsetHeight
+					var newHeight = height + 20
+					el.style.height = newHeight + 'px'
+					setTimeout(() => {
+						const scroller = new LocomotiveScroll({
+							el: document.getElementById('holder'),
+							smooth: true,
+						})
+					}, 100)
+				}
+			}
+		</script>
+	</head>
+	<body onload="getContent()">
+		<button
+			id="close"
+			onclick="window.history.go(-1)"
+			style="left: 2px; top: 2px; font-size: 30px; width: 34px"
+		>
+			⤺
+		</button>
+		<div id="holder"><p id="main_text">Загрузка...</p></div>
+	</body>
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Багаж Знаний</title>
+		<meta charset="UTF-8" />
+		<link rel="stylesheet" type="text/css" href="main.css" />
+		<link rel="icon" type="image/png" href="favicon.svg" />
+		<script type="text/javascript" src="/eel.js"></script>
+		<script type="text/javascript">
+			async function displayNextImage() {
+				x = x === images.length - 1 ? 0 : x + 1
+				document.getElementById('picture').src = images[x]
+			}
+
+			var images = ['data/book.svg', 'data/bd.svg'],
+				x = -1
+
+			async function startTimer() {
+				setTimeout(function () {
+					displayNextImage()
+					setInterval(displayNextImage, 10000)
+				}, 7700)
+			}
+		</script>
+	</head>
+	<body onload="startTimer()" style="overflow: hidden">
+		<div id="logo">
+			<div id="word_left"><b>БАГАЖ</b></div>
+			<div id="word_right"><b>ЗНАНИЙ</b></div>
+			<p id="picture_holder">
+				<img
+					id="picture"
+					src="https://icon-icons.com/downloadimage.php?id=104349&root=1508/SVG/&file=gnomebooks_104348.svg"
+				/>
+			</p>
+		</div>
+		<div id="menu_content">
+			<a href="/buttons.html">
+				<button id="menu">
+					<h3 id="type" class="menu_text">ПРОИЗВЕДЕНИЯ</h3>
+				</button>
+			</a>
+			<a href="/tests.html">
+				<button id="menu">
+					<h3 id="type" class="menu_text">ТЕСТЫ</h3>
+				</button>
+			</a>
+			<button id="credits" onclick="Dropdown()">
+				<h3 id="type" class="menu_text">Информация</h3>
+			</button>
+		</div>
+		<div class="dropdown-overlay" id="dropdown-overlay">
+			<div class="dropdown" id="dropdown">
+				<div class="dropdown-content">
+					<button id="close1" onclick="Dropdown()">✖</button>
+					<div class="container">
+						<div class="row">Автор:</div>
+						<div class="row indent">
+							<b
+								><a href="https://github.com/N1ck6" target="_blank">N1ck6</a></b
+							>
+						</div>
+						<div class="row">Материалы:</div>
+						<div class="row indent">
+							Тексты - <b><a href="http://lib.ru/" target="_blank">Lib</a></b>
+						</div>
+						<div class="row indent">
+							Пересказы -
+							<b
+								><a href="https://obrazovaka.ru/" target="_blank"
+									>Obrazovaka</a
+								></b
+							>
+						<button class="hands" onclick="grabU()">
+							<span>СХВАТИТЬ</span><img id="hands1" src="data/hands.png" />
+						</button>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+		<img id="hands" src="data/hands.png" />
+		<script>
+			const cre = document.getElementById('credits')
+			const drop = document.getElementById('dropdown')
+			const drop_o = document.getElementById('dropdown-overlay')
+
+			function Dropdown() {
+				if (drop.style.display == 'block') {
+					drop.style.display = 'none'
+					drop_o.style.visibility = 'hidden'
+				} else {
+					drop.style.display = 'block'
+					drop_o.style.visibility = 'visible'
+				}
+			}
+			function grabU() {
+				var image = document.getElementById('hands')
+				image.style.opacity = '100%'
+				image.classList.toggle('show')
+				setTimeout(function () {
+					image.classList.remove('show')
+				}, 1100)
+				image.classList.toggle('transparent')
+				setTimeout(function () {
+					image.style.opacity = '0%'
+				}, 500)
+				setTimeout(function () {
+					image.style.opacity = '100%'
+				}, 2000)
+			}
+		</script>
+	</body>
+</html>

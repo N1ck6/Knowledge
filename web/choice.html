@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title> </title>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" type="text/css" href="main.css" />
+		<script type="text/javascript" src="/eel.js"></script>
+		<link rel="icon" type="image/png" href="favicon.svg" />
+	</head>
+	<body>
+		<button id="close" onclick="window.history.go(-1)">⤺</button>
+		<h1 id="name1">НАЗВАНИЕ ПРОИЗВЕДЕНИЯ</h1>
+
+		<div id="content">
+			<button id="choice" onclick="open_txt('2')">Кратчайшее содержание</button>
+			<button id="choice" onclick="open_txt('1')">Краткое содержание</button>
+			<button id="choice" onclick="open_txt('0')">Текст произведения</button>
+			<div class="checkbox-container">
+				<p id="checkbox-text">
+					<b>Плавная прокрутка:</b>
+				</p>
+				<input type="checkbox" id="checkbox" onclick="rotateButton()" />
+			</div>
+		</div>
+		<script>
+			const params = new URLSearchParams(window.location.search)
+			const val = params.get('name')
+			document.getElementById('name1').innerHTML = val
+			document.title = val
+			async function open_txt(end) {
+				const name = document.getElementById('name1').innerHTML
+				if (rotated) {
+					rotated = false
+					document.getElementById('checkbox').click()
+					location.href = '/text.html?name=' + name + end + '?scroll=1'
+				} else {
+					location.href = '/text.html?name=' + name + end + '?scroll=0'
+				}
+			}
+			let rotated = false
+			function rotateButton() {
+				const scroll = document.getElementById('checkbox')
+				if (!rotated) {
+					scroll.style.transform = 'rotate(-45deg)'
+					rotated = true
+				} else {
+					scroll.style.transform = 'rotate(0deg)'
+					rotated = false
+				}
+			}
+		</script>
+	</body>
+</html>
